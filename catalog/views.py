@@ -9,19 +9,19 @@ from .serializers import ProductSerializer, CategorySerializer, SubCategorySeria
 from .pagination import StandardResultsSetPagination, LargeResultsSetPagination
 
 
-class ProductViewset(viewsets.ModelViewSet):
+class ProductViewset(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
     pagination_class = StandardResultsSetPagination
 
 
-class CategoryViewset(viewsets.ModelViewSet):
+class CategoryViewset(viewsets.ReadOnlyModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     pagination_class = LargeResultsSetPagination
 
 
-class SubCategoryViewset(viewsets.ModelViewSet):
+class SubCategoryViewset(viewsets.ReadOnlyModelViewSet):
     queryset = SubCategory.objects.all()
     serializer_class = SubCategorySerializer
     pagination_class = LargeResultsSetPagination
