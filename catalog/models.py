@@ -1,3 +1,4 @@
+from unicodedata import category
 from django.db import models
 
 
@@ -10,6 +11,9 @@ class Category(models.Model):
 
 class SubCategory(models.Model):
     title = models.CharField(max_length=255)
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self):
         return f"{self.id}"
@@ -21,6 +25,9 @@ class Product(models.Model):
     alt_type = models.CharField(max_length=255)
     product_url = models.URLField()
     title = models.CharField(max_length=255)
+    sub_category = models.ForeignKey(
+        SubCategory, on_delete=models.CASCADE, null=True, blank=True
+    )
 
     def __str__(self) -> str:
         return f"{self.id}"
