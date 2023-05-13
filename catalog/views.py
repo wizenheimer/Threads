@@ -13,6 +13,10 @@ class ProductViewset(viewsets.ReadOnlyModelViewSet):
     queryset = Product.objects.filter(is_active=True)
     serializer_class = ProductSerializer
     pagination_class = StandardResultsSetPagination
+    search_fields = [
+        "brand",
+        "sub_category",
+    ]
 
 
 class CategoryViewset(viewsets.ReadOnlyModelViewSet):
