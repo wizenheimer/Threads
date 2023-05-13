@@ -3,10 +3,31 @@ from rest_framework import viewsets
 from rest_framework.decorators import action, api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
-
+from django_elasticsearch_dsl_drf.viewsets import DocumentViewSet
+from catalog.documents import ProductDocument
+from catalog.serializers import ProductDocumentSerializer
 from .models import Product, Category, SubCategory
 from .serializers import ProductSerializer, CategorySerializer, SubCategorySerializer
 from .pagination import StandardResultsSetPagination, LargeResultsSetPagination
+from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend
+from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend
+
+
+class ProductDocumentViewset(DocumentViewSet):
+    document = ProductDocument
+    serializer_class = ProductDocumentSerializer
+
+    filter_backends = [SearchFilterBackend]
+
+    search_fields = (
+        "brand",
+        "title",
+        "sub_category",
+    )
+
+    filter_backends = [FilteringFilterBackend]
+
+    filter_fields = {"sub_category": "sub_category.title"}
 
 
 class ProductViewset(viewsets.ReadOnlyModelViewSet):

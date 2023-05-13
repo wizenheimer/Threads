@@ -1,5 +1,8 @@
 from rest_framework import serializers
 from .models import Category, SubCategory, Product
+from django_elasticsearch_dsl_drf.serializers import DocumentSerializer
+
+from catalog.documents import ProductDocument
 
 
 class CategorySerializer(serializers.ModelSerializer):
@@ -44,3 +47,14 @@ class ProductSerializer(serializers.ModelSerializer):
             return expanded_fields + self.Meta.extra_fields
         else:
             return expanded_fields
+
+
+class ProductDocumentSerializer(DocumentSerializer):
+    class Meta:
+        document = ProductDocument
+
+        fields = (
+            "brand",
+            "title",
+            "sub_category",
+        )

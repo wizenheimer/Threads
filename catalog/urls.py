@@ -12,6 +12,7 @@ router.register(
     views.SubCategoryViewset,
     basename="subcategory_viewset",
 )
+router.register(r"search", views.ProductDocumentViewset, basename="search")
 
 # The API URLs are now determined automatically by the router.
 urlpatterns = [
