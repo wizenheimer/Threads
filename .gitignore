@@ -140,3 +140,5 @@ GitHub.sublime-settings
 .history
 
 dataset/
+dataset.csv
+dataset_cleaned.csv
