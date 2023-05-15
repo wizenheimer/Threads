@@ -9,15 +9,24 @@ from catalog.serializers import ProductDocumentSerializer
 from .models import Product, Category, SubCategory
 from .serializers import ProductSerializer, CategorySerializer, SubCategorySerializer
 from .pagination import StandardResultsSetPagination, LargeResultsSetPagination
-from django_elasticsearch_dsl_drf.filter_backends import SearchFilterBackend
-from django_elasticsearch_dsl_drf.filter_backends import FilteringFilterBackend
+from django_elasticsearch_dsl_drf.constants import SUGGESTER_COMPLETION
+from django_elasticsearch_dsl_drf.filter_backends import (
+    SearchFilterBackend,
+    FilteringFilterBackend,
+    SuggesterFilterBackend,
+)
 
 
 class ProductDocumentViewset(DocumentViewSet):
     document = ProductDocument
     serializer_class = ProductDocumentSerializer
+    pagination_class = StandardResultsSetPagination
 
-    filter_backends = [SearchFilterBackend]
+    filter_backends = [
+        SearchFilterBackend,
+        FilteringFilterBackend,
+        SuggesterFilterBackend,
+    ]
 
     search_fields = (
         "brand",
@@ -25,9 +34,22 @@ class ProductDocumentViewset(DocumentViewSet):
         "sub_category",
     )
 
-    filter_backends = [FilteringFilterBackend]
-
     filter_fields = {"sub_category": "sub_category.title"}
+
+    suggester_fields = {
+        "title": {
+            "field": "title.suggest",
+            "suggesters": [
+                SUGGESTER_COMPLETION,
+            ],
+        },
+        "brand": {
+            "field": "brand.suggest",
+            "suggesters": [
+                SUGGESTER_COMPLETION,
+            ],
+        },
+    }
 
 
 class ProductViewset(viewsets.ReadOnlyModelViewSet):
